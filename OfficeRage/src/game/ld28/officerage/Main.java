@@ -12,11 +12,13 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-        Main main = new Main();
+//        Main main = new Main();
 //        main.testRenderer(640, 480);
 //        main.testMouse(640, 480);
-         main.testKeyboard(640, 480);
-         System.exit(0);
+//        main.testKeyboard(640, 480);
+        Game game = new Game("OfficeRage", 800, 600);
+        game.start();
+        System.exit(0);
     }
 
     private void testRenderer(int gx, int gy) {
@@ -83,9 +85,9 @@ public class Main {
         keyboard.registerKey("SPACE", KeyEvent.VK_SPACE);
         keyboard.registerKey("BACKSPACE", KeyEvent.VK_BACK_SPACE);
         gfx.addKeyboard(keyboard);
-        
+
         boolean running = true;
-        
+
         while (running) {
             if (keyboard.isKeyDown("ESCAPE")) {
                 running = false;
