@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
@@ -67,9 +68,13 @@ public class Renderer {
         Toolkit.getDefaultToolkit().sync();
     }
     
-    public void addMouseListeners(MouseListener mouseListener, MouseMotionListener motionListener) {
+    public void addMouse(MouseListener mouseListener, MouseMotionListener motionListener) {
         frame.addMouseListener(mouseListener);
         frame.addMouseMotionListener(motionListener);
+    }
+    
+    public void addKeyboard(KeyListener listener) {
+        frame.addKeyListener(listener);
     }
 
 }
