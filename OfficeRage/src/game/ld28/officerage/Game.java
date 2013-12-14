@@ -60,17 +60,19 @@ public class Game {
         if (keyboard.isKeyDown("ESCAPE")) {
             running = false;
         }
-        double speed = 50;
+        double speed = 30;
         double vx = 0, vy = 0;
         if (keyboard.isKeyDown("W")) {
-            vy = -speed;
-        } else if (keyboard.isKeyDown("S")) {
-            vy = speed;
+            vy += -speed;
+        }
+        if (keyboard.isKeyDown("S")) {
+            vy += speed;
         }
         if (keyboard.isKeyDown("A")) {
-            vx = -speed;
-        } else if (keyboard.isKeyDown("D")) {
-            vx = speed;
+            vx += -speed;
+        }
+        if (keyboard.isKeyDown("D")) {
+            vx += speed;
         }
         player.setVel(vx, vy);
     }
