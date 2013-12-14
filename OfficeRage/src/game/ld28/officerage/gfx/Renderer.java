@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.util.Iterator;
 import java.util.List;
@@ -63,6 +65,11 @@ public class Renderer {
         
         bs.show();
         Toolkit.getDefaultToolkit().sync();
+    }
+    
+    public void addMouseListeners(MouseListener mouseListener, MouseMotionListener motionListener) {
+        frame.addMouseListener(mouseListener);
+        frame.addMouseMotionListener(motionListener);
     }
 
 }
