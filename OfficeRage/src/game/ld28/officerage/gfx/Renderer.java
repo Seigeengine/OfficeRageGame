@@ -46,7 +46,8 @@ public class Renderer {
         Graphics2D g2d = null;
         try {
             g2d = (Graphics2D) bs.getDrawGraphics();
-            g2d.clearRect(0, 0, WIDTH, WIDTH);
+            g2d.clearRect(0, 0, WIDTH, HEIGHT);
+//            g2d.clipRect(0, 0, WIDTH, HEIGHT);
             
             for (int i = 0; i < renderables.length; i++) {
                 for (Iterator<Renderable> it = renderables[i].iterator(); it.hasNext();) {
