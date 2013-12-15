@@ -3,14 +3,17 @@ package game.ld28.officerage;
 import game.ld28.officerage.entities.TestEntity;
 import game.ld28.officerage.gfx.Renderable;
 import game.ld28.officerage.gfx.Renderer;
+import game.ld28.officerage.gfx.SpriteSheet;
 import game.ld28.officerage.input.Keyboard;
 import game.ld28.officerage.input.Mouse;
 import game.ld28.officerage.level.Camera;
 import game.ld28.officerage.level.TileMap;
 import game.ld28.officerage.level.TileType;
+import game.ld28.officerage.utils.AssetLoader;
 import game.ld28.officerage.utils.Clock;
 import game.ld28.officerage.utils.PhysicsUtils;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,8 @@ public class Game {
 
         camera = new Camera(0, 0, 800, 600);
 
+        TileType.load();
+        
         //Shortcuts
         keyboard.registerKey("ESCAPE", KeyEvent.VK_ESCAPE);
         //Movement

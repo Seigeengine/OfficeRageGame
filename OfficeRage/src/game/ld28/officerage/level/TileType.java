@@ -1,18 +1,27 @@
 package game.ld28.officerage.level;
 
-import game.ld28.officerage.entities.TestEntity;
+import game.ld28.officerage.entities.TileEntity;
+import game.ld28.officerage.gfx.SpriteSheet;
+import game.ld28.officerage.utils.AssetLoader;
 
 public enum TileType {
-    SKY(false, new TestEntity(-100, -100, 32, 32, 0x0000FF)),
-    STRUCTURE(true, new TestEntity(-100, -100, 32, 32, 0xAAAAAA)),
-    BACK_WALL(false, new TestEntity(-100, -100, 32, 32, 0x222222));
+    SKY(false, new TileEntity(-100, -100, 32, 32, null)),
+    STRUCTURE(true, new TileEntity(-100, -100, 32, 32, null)),
+    BACK_WALL(false, new TileEntity(-100, -100, 32, 32, null));
     
+    private static final SpriteSheet tileSheet = new SpriteSheet(AssetLoader.getBufferedImage("/game/ld28/officerage/assets/graphics/TileSheet.png"), 32);
     
     public final boolean solidity;
-    public final TestEntity tileEntity;
+    public final TileEntity tileEntity;
     
-    private TileType(boolean solidity, TestEntity tileEntity) {
+    private TileType(boolean solidity, TileEntity tileEntity) {
         this.solidity = solidity;
         this.tileEntity = tileEntity;
+    }
+    
+    public static void load() {
+        SKY.tileEntity.setImg(tileSheet.getSprite(1, 0));
+        STRUCTURE.tileEntity.setImg(tileSheet.getSprite(0, 0));
+        BACK_WALL.tileEntity.setImg(tileSheet.getSprite(2, 0));
     }
 }
