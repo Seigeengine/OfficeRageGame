@@ -8,9 +8,8 @@ public class Mouse implements MouseListener, MouseMotionListener{
 
     private int mx, my;
     private boolean leftClickPressed = false;
+    private boolean middleClickPressed = false;
     private boolean rightClickPressed = false;
-    private boolean leftButtonDown = false;
-    private boolean rightButtonDown = false;
     private boolean mouseInScreen = false;
     
     @Override
@@ -21,16 +20,18 @@ public class Mouse implements MouseListener, MouseMotionListener{
     @Override
     public void mousePressed(MouseEvent e) {
         switch (e.getButton()) {
-            case 1: leftClickPressed = true; leftButtonDown = true; break;
-            case 3: rightClickPressed = true; rightButtonDown = true; break;
+            case 1: leftClickPressed = true; break;
+            case 2: middleClickPressed = true; break;
+            case 3: rightClickPressed = true; break;
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         switch (e.getButton()) {
-            case 1: leftClickPressed = false; leftButtonDown = false; break;
-            case 3: rightClickPressed = false; rightButtonDown = false; break;
+            case 1: leftClickPressed = false; break;
+            case 2: middleClickPressed = false; break;
+            case 3: rightClickPressed = false; break;
         }
     }
 
@@ -71,6 +72,14 @@ public class Mouse implements MouseListener, MouseMotionListener{
         }
         return b;
     }
+    
+    public boolean isMiddleClickPressed(boolean unPress) {
+        boolean b = middleClickPressed;
+        if (unPress) {
+            middleClickPressed = false;
+        }
+        return b;
+    }
 
     public boolean isRightClickPressed(boolean unPress) {
         boolean b = rightClickPressed;
@@ -78,18 +87,6 @@ public class Mouse implements MouseListener, MouseMotionListener{
             rightClickPressed = false;
         }
         return b;
-    }
-
-    public boolean isLeftButtonDown() {
-        return leftButtonDown;
-    }
-
-    public boolean isRightButtonDown() {
-        return rightButtonDown;
-    }
-
-    public boolean isMouseInScreen() {
-        return mouseInScreen;
     }
 
 }

@@ -28,6 +28,10 @@ public class Game {
     private TileMap level;
     private List<Renderable> entities;
     private List<Renderable> background;
+    
+    private final int tileSize = 32;
+    private final double gravity = 8;
+    private final double jumpStrength = 350;
 
     public Game(String name, int width, int height) {
         //init here
@@ -43,8 +47,9 @@ public class Game {
         TileType.load();
         
         //Shortcuts
-        keyboard.registerKey("ESCAPE", KeyEvent.VK_ESCAPE);
+        keyboard.registerKey("EXIT", KeyEvent.VK_ESCAPE);
         keyboard.registerKey("SAVE", KeyEvent.VK_PAGE_DOWN);
+        keyboard.registerKey("LOAD", KeyEvent.VK_PAGE_UP);
         //Movement
         keyboard.registerKey("W", KeyEvent.VK_W);
         keyboard.registerKey("A", KeyEvent.VK_A);
@@ -55,11 +60,11 @@ public class Game {
         gfx.addKeyboard(keyboard);
 
         background = new ArrayList<Renderable>();
-        level = new TileMap(32, 64, 32, camera);
+        level = new TileMap(32, 64, tileSize, camera);
         background.add(level);
 
         entities = new ArrayList<Renderable>();
-        player = new TestEntity(100, 100, 100, 100, 0xFF0000);
+        player = new TestEntity(90, 90, 60, 60, 0xFF0000);
         entities.add(player);
     }
 
@@ -78,11 +83,27 @@ public class Game {
 
     private void input(int delta) {
         //Process input and alter affected entities.
-        if (keyboard.isKeyDown("ESCAPE", true)) {
+        //MOUSE
+        if (mouse.isLeftClickPressed(false)) {
+            level.setTile(mouse.getMx(), mouse.getMy(), TileType.STRUCTURE);
+        }
+        if (mouse.isMiddleClickPressed(false)) {
+            level.setTile(mouse.getMx(), mouse.getMy(), TileType.BACK_WALL);
+        }
+        if (mouse.isRightClickPressed(false)) {
+            level.setTile(mouse.getMx(), mouse.getMy(), TileType.SKY);
+        }
+        //KEYBOARD
+        if (keyboard.isKeyDown("EXIT", true)) {
             running = false;
         }
         if (keyboard.isKeyDown("SAVE", true)) {
             MapIO.save("src/game/ld28/officerage/assets/leveldata/data.txt", level.getData());
+        }
+        if (keyboard.isKeyDown("LOAD", true)) {
+//            String loadPath = "src/game/ld28/officerage/assets/leveldata/data.txt";
+            String loadPath = "/game/ld28/officerage/assets/leveldata/data.txt";
+            level.setData(MapIO.load(loadPath));
         }
         double speed = 200;
         double vx = player.getX()*0, vy = player.getVy();
@@ -93,20 +114,13 @@ public class Game {
             vx += speed;
         }
         if (vy == 0 && keyboard.isKeyDown("W", false)) {
-            vy -= 200;
+            vy -= jumpStrength;
         }
-        vy += 1;
+        vy += gravity;
         player.setVel(vx, vy);
     }
 
     private void update(int delta) {
-        if (mouse.isLeftClickPressed(false)) {
-            level.setTile(mouse.getMx(), mouse.getMy(), TileType.STRUCTURE);
-        }
-        if (mouse.isRightClickPressed(false)) {
-            level.setTile(mouse.getMx(), mouse.getMy(), TileType.SKY);
-        }
-
         //Update entities based on time passed.
         double px = player.getX();
         double py = player.getY();
@@ -118,11 +132,11 @@ public class Game {
         if (level.testCollision(player)) {
             player.setPos(px, py2);
             if (level.testCollision(player)) {
-                player.setVel(0, player.getVy());
+                player.setVel(player.getVx(), 0);
             }
             player.setPos(px2, py);
             if (level.testCollision(player)) {
-                player.setVel(player.getVx(), 0);
+                player.setVel(0, player.getVy());
             }
             player.setPos(px, py);
             player.update(delta);

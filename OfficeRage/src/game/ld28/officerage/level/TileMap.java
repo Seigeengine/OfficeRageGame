@@ -8,17 +8,26 @@ public class TileMap implements Renderable {
     private TileType[][] tileMap;
     private Camera camera;
     public final int tileSize;
+    
+    public TileMap(TileType[][] data, int tileSize, Camera camera) {
+        tileMap = data;
+        this.camera = camera;
+        this.tileSize = tileSize;
+    }
 
     public TileMap(int width, int height, int tileSize, Camera camera) {
         this.camera = camera;
         tileMap = new TileType[width][height];
         for (int i = 0; i < tileMap.length; i++) {
             for (int j = 0; j < tileMap[0].length; j++) {
+                
                 if (i == 6 || i == tileMap.length-7) {
                     tileMap[i][j] = TileType.STRUCTURE;
-                }else if((j-6) % 6 == 0) {
+                } else if((j-6) % 6 == 0) {
                     tileMap[i][j] = TileType.STRUCTURE;
-                }else {
+                } else if (i < 6 || i > tileMap[0].length-7) {
+                    tileMap[i][j] = TileType.SKY;
+                } else {
                     tileMap[i][j] = TileType.BACK_WALL;
                 }
             }
@@ -30,8 +39,14 @@ public class TileMap implements Renderable {
         x = (int) ((x + camera.getX()) / tileSize);
         y = (int) ((y + camera.getY()) / tileSize);
         if (x > -1 && y > -1 && x < camera.getWidth() && y < camera.getHeight()) {
-            tileMap[x][y] = type;
+            if (x < tileMap.length && y < tileMap[0].length) {
+                tileMap[x][y] = type;
+            }
         }
+    }
+    
+    public void setData(TileType[][] data) {
+        this.tileMap = data;
     }
     
     public TileType[][] getData() {
