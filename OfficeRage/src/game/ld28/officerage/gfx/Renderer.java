@@ -1,5 +1,6 @@
 package game.ld28.officerage.gfx;
 
+import game.ld28.officerage.level.Camera;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -16,6 +17,7 @@ public class Renderer {
     public final String TITLE;
     public final int WIDTH, HEIGHT;
     private JFrame frame;
+    private Camera cam;
     
     public Renderer(String title, int width, int height) {
         TITLE = title.intern();
@@ -47,7 +49,9 @@ public class Renderer {
         try {
             g2d = (Graphics2D) bs.getDrawGraphics();
             g2d.clearRect(0, 0, WIDTH, HEIGHT);
-//            g2d.clipRect(0, 0, WIDTH, HEIGHT);
+            if (cam != null) {
+                cam.render(g2d);
+            }
             
             for (int i = 0; i < renderables.length; i++) {
                 for (Iterator<Renderable> it = renderables[i].iterator(); it.hasNext();) {
@@ -76,6 +80,15 @@ public class Renderer {
     
     public void addKeyboard(KeyListener listener) {
         frame.addKeyListener(listener);
+    }
+    
+    public Camera setCamera(Camera cam) {
+        Camera oldCam = null;
+        if (this.cam != null) {
+            oldCam = this.cam;
+        }
+        this.cam = cam;
+        return oldCam;
     }
 
 }

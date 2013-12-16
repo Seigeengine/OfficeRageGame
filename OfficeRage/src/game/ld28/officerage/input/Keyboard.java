@@ -20,9 +20,14 @@ public class Keyboard implements KeyListener {
         keyMap.put(keyCode, name);
     }
     
-    public boolean isKeyDown(String name) {
+    public boolean isKeyDown(String name, boolean unPress) {
         if (accessMap.containsKey(name)) {
-            return accessMap.get(name).isKeyDown();
+            Key k = accessMap.get(name);
+            boolean wasKeyDown = k.isKeyDown();
+            if (unPress) {
+                k.setDown(false);
+            }
+            return wasKeyDown;
         }
         throw new IllegalArgumentException("Attempted to access unregistered key: " + name);
     }

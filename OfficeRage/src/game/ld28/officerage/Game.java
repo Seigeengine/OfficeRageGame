@@ -11,6 +11,7 @@ import game.ld28.officerage.level.TileMap;
 import game.ld28.officerage.level.TileType;
 import game.ld28.officerage.utils.AssetLoader;
 import game.ld28.officerage.utils.Clock;
+import game.ld28.officerage.utils.MapIO;
 import game.ld28.officerage.utils.PhysicsUtils;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -34,12 +35,16 @@ public class Game {
         mouse = new Mouse();
         keyboard = new Keyboard();
 
-        camera = new Camera(0, 0, 800, 600);
+        camera = new Camera(0, 0, gfx.WIDTH, gfx.HEIGHT);
+        gfx.setCamera(camera);
 
+        Clock.setSyncFPS(60);
+        
         TileType.load();
         
         //Shortcuts
         keyboard.registerKey("ESCAPE", KeyEvent.VK_ESCAPE);
+        keyboard.registerKey("SAVE", KeyEvent.VK_PAGE_DOWN);
         //Movement
         keyboard.registerKey("W", KeyEvent.VK_W);
         keyboard.registerKey("A", KeyEvent.VK_A);
@@ -51,18 +56,17 @@ public class Game {
 
         background = new ArrayList<Renderable>();
         level = new TileMap(32, 64, 32, camera);
-        background.add(camera);
         background.add(level);
 
         entities = new ArrayList<Renderable>();
         player = new TestEntity(100, 100, 100, 100, 0xFF0000);
         entities.add(player);
-
-        camera.setFollowing(player);
     }
 
     public void start() {
+        camera.setFollowing(player);
         running = true;
+        
         while (running) {
             int delta = Clock.getDelta(); //Do timing to get this.
             input(delta);
@@ -74,24 +78,21 @@ public class Game {
 
     private void input(int delta) {
         //Process input and alter affected entities.
-        if (keyboard.isKeyDown("ESCAPE")) {
+        if (keyboard.isKeyDown("ESCAPE", true)) {
             running = false;
+        }
+        if (keyboard.isKeyDown("SAVE", true)) {
+            MapIO.save("src/game/ld28/officerage/assets/leveldata/data.txt", level.getData());
         }
         double speed = 200;
         double vx = player.getX()*0, vy = player.getVy();
-//        if (keyboard.isKeyDown("W")) {
-//            vy += -speed;
-//        }
-//        if (keyboard.isKeyDown("S")) {
-////            vy += speed;
-//        }
-        if (keyboard.isKeyDown("A")) {
+        if (keyboard.isKeyDown("A", false)) {
             vx += -speed;
         }
-        if (keyboard.isKeyDown("D")) {
+        if (keyboard.isKeyDown("D", false)) {
             vx += speed;
         }
-        if (vy == 0 && keyboard.isKeyDown("W")) {
+        if (vy == 0 && keyboard.isKeyDown("W", false)) {
             vy -= 200;
         }
         vy += 1;
@@ -136,9 +137,9 @@ public class Game {
 
     private void sleep() {
         //Maybe base off delta. Figure out in timing
-//        try {
-////            Thread.sleep(10);
-//        } catch (Exception e) {
-//        }
+        try {
+            Thread.sleep(Clock.getSyncTime()-1);
+        } catch (Exception e) {
+        }
     }
 }

@@ -89,10 +89,10 @@ public class Main {
         boolean running = true;
 
         while (running) {
-            if (keyboard.isKeyDown("ESCAPE")) {
+            if (keyboard.isKeyDown("ESCAPE", true)) {
                 running = false;
             }
-            if (keyboard.isKeyDown("SPACE")) {
+            if (keyboard.isKeyDown("SPACE", false)) {
                 int w = ran.nextInt(50) + 1;
                 int h = ran.nextInt(50) + 1;
                 int x = ran.nextInt(gx - w);
@@ -102,7 +102,7 @@ public class Main {
                 TestRenderable box = new TestRenderable(x, y, w, h, col);
                 renderables.add(box);
             }
-            if (keyboard.isKeyDown("BACKSPACE")) {
+            if (keyboard.isKeyDown("BACKSPACE", true)) {
                 renderables.clear();
             }
             gfx.render(renderables);

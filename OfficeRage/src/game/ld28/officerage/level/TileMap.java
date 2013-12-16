@@ -14,11 +14,12 @@ public class TileMap implements Renderable {
         tileMap = new TileType[width][height];
         for (int i = 0; i < tileMap.length; i++) {
             for (int j = 0; j < tileMap[0].length; j++) {
-                if (i > 10 && i < 20 && j > 10 && j < 20
-                        || j == height-1) {
+                if (i == 6 || i == tileMap.length-7) {
                     tileMap[i][j] = TileType.STRUCTURE;
-                }else{
-                    tileMap[i][j] = TileType.SKY;
+                }else if((j-6) % 6 == 0) {
+                    tileMap[i][j] = TileType.STRUCTURE;
+                }else {
+                    tileMap[i][j] = TileType.BACK_WALL;
                 }
             }
         }
@@ -31,7 +32,11 @@ public class TileMap implements Renderable {
         if (x > -1 && y > -1 && x < camera.getWidth() && y < camera.getHeight()) {
             tileMap[x][y] = type;
         }
-    } 
+    }
+    
+    public TileType[][] getData() {
+        return tileMap;
+    }
 
     @Override
     public void render(Graphics2D g2d) {
